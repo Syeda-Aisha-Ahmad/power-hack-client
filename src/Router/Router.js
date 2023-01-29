@@ -1,13 +1,21 @@
+import Layout from "../Layout/Layout";
 import Login from "../Login/Login";
 import Registration from "../Registration/Registration";
+import Table from "../Table/Table";
+import PrivateRoute from "./PrivateRoute";
 
 const { createBrowserRouter } = require("react-router-dom");
-const { default: Header } = require("../Shared/Header/Header");
 
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <Header></Header>
+        element: <Layout></Layout>,
+        children: [
+            {
+                path: "/",
+                element: <Table></Table>
+            }
+        ]
     },
     {
         path: "/registration",

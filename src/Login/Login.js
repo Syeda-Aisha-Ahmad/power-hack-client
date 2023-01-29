@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -16,6 +17,7 @@ const Login = () => {
                     {errors.exampleRequired && <span>This field is required</span>}
 
                     <input type="submit" className="btn btn-primary" />
+                    <p>Don't have an account? <Link to="/registration" className='link text-blue-600 font-semibold'>Register here</Link></p>
                 </form>
             </div>
         </div>
