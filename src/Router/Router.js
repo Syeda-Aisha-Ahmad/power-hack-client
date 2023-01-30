@@ -13,7 +13,8 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Table></Table>
+                element: <Table></Table>,
+                loader: () => fetch('http://localhost:5000/add-billing')
             }
         ]
     },

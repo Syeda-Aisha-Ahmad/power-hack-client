@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
+import { ErrorMessage } from '@hookform/error-message';
 
 const TableNav = () => {
-    const [mod, setMod] = useState(false);
+    const [data, setData] = useState(null);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const onSubmit = data => {
         const addBills = {
@@ -12,7 +13,6 @@ const TableNav = () => {
             phone: data.phone,
             amount: data.amount,
         }
-        console.log(addBills);
         fetch("http://localhost:5000/add-billing", {
             method: "POST",
             headers: {
@@ -24,6 +24,7 @@ const TableNav = () => {
             .then((data) => {
                 if (data.acknowledged) {
                     toast.success('Successfully Added!');
+                    setData(data)
                     reset()
                 }
                 else (alert('none'))
@@ -33,6 +34,33 @@ const TableNav = () => {
             .catch((error) => console.error(error));
 
     };
+
+    // // Total bills
+    // let a = [];
+    // let b = []
+
+    // fetch('http://localhost:5000/add-billing', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     }
+    // })
+    //     .then(res => res.json())
+    //     .then(data => {
+    //         const filteredData = data.result.map(item => {
+
+    //             for (let i = 0; i < data.result.length; i++) {
+    //                 b.push(item.amount)
+    //                 // console.log(b)
+    //                 // return b;
+    //             }
+    //         }
+
+    //         );
+    // })
+    // .catch (error => console.error(error));
+
+
     return (
         <div className="navbar bg-gray-400 px-5 py-0 mt-10 w-11/12 mx-auto">
             <Toaster />
@@ -47,33 +75,46 @@ const TableNav = () => {
                 <label htmlFor="my-modal" className="btn">Add New Bill</label>
             </div>
 
-            {/* The button to open modal */}
-
-
-            {/* Put this part before </body> tag */}
             <input type="checkbox" id="my-modal" className="modal-toggle" />
             <div className="modal">
                 <div className="modal-box">
                     <h1 className='mb-5 text-2xl font-semibold'>Add New Bill</h1>
                     <form onSubmit={handleSubmit(onSubmit)}>
 
-                        <input placeholder='Full Name' className='input input-bordered m-2' type={"text"} {...register("fname", { required: true })} />
 
-                        <input placeholder='Email' type={"email"} className='input input-bordered' {...register("email", { required: true })} />
 
-                        <input placeholder='Phone' type={"text"} className='input input-bordered m-2' {...register("phone", { required: true })} />
+                        <input placeholder='Full Name' className='input input-bordered m-2' type={"text"} {...register("fname", { required: "Full Name is required" })} />
+                        <ErrorMessage className="text-red-500" errors={errors} name="singleErrorInput" />
 
-                        <input placeholder='Payable Amount' type={"text"} className='input input-bordered' {...register("amount", { required: true })} />
+                        <input placeholder='Email' type={"email"} className='input input-bordered' {...register("email", { required: "Email is required" })} />
+
+                        <input minlength="11" placeholder='Phone' type={"text"} className='input input-bordered m-2' {...register("phone", { required: "Phone is required" })} />
+
+                        <input placeholder='Payable Amount' type={"text"} className='input input-bordered' {...register("amount", { required: "Payable Amount is required" })} />
                         {errors.exampleRequired && <span className='text-error'>This field is required</span>}
 
-                        {/* <div className="modal-action"> */}
-                        {/* <label htmlFor="my-modal">
-                            submit
-                        </label> */}
-                        <button className="btn w-full mt-5" ><input htmlFor="my-modal" type="submit" className='w-full' /></button>
-                        {/* </label> */}
+                        <ErrorMessage
+                            errors={errors}
+                            name="fname"
+                            render={({ message }) => <p className="text-red-500">{message}</p>}
+                        />
+                        <ErrorMessage
+                            errors={errors}
+                            name="email"
+                            render={({ message }) => <p className="text-red-500">{message}</p>}
+                        />
+                        <ErrorMessage
+                            errors={errors}
+                            name="phone"
+                            render={({ message }) => <p className="text-red-500">{message}</p>}
+                        />
+                        <ErrorMessage
+                            errors={errors}
+                            name="amount"
+                            render={({ message }) => <p className="text-red-500">{message}</p>}
+                        />
 
-                        {/* </div> */}
+                        <button className="btn w-full mt-5" ><input htmlFor="my-modal" type="submit" className='w-full' /></button>
                     </form>
 
                 </div>
